@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shopping_cart/components/my_card.dart';
 import 'package:shopping_cart/const/items.dart';
 import 'package:shopping_cart/pages/cart_page.dart';
+import 'package:shopping_cart/pages/favorite_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -20,7 +21,10 @@ class HomePage extends StatelessWidget {
           ),
           IconButton(
             icon: Icon(Icons.favorite),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                  MaterialPageRoute(builder: ((context) => FavoritePage())));
+            },
           ),
           SizedBox(
             width: 15,

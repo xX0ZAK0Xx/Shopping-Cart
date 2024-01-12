@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_cart/providers/cart_list_provider.dart';
+import 'package:shopping_cart/providers/favorite_list_provider.dart';
 
 class MyCard extends StatelessWidget {
   final item;
@@ -65,6 +66,28 @@ class MyCard extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Consumer<FavouriteListProvider>(
+                builder: (BuildContext context, FavouriteListProvider value, Widget? child) => Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                      color: value.favoriteItems.contains(item) ? Colors.red : Colors.white,
+                      border: Border.all(color: Colors.red),
+                      shape: BoxShape.circle),
+                  child: IconButton(
+                    icon: Icon(Icons.favorite_border_rounded, color: value.favoriteItems.contains(item) ? Colors.white : Colors.red,),
+                    onPressed: () {
+                      if(value.favoriteItems.contains(item)){
+                        value..removeFromFavorite(item);
+                      }else{
+                        value.addToFavorite(item);
+                      }
+                    },
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               Consumer<CartListProvider>(
                 builder: (BuildContext context, CartListProvider value,
                         Widget? child) =>
@@ -89,20 +112,6 @@ class MyCard extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                height: 40,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.black),
-                    shape: BoxShape.circle),
-                child: IconButton(
-                  icon: const Icon(Icons.favorite_outline),
-                  onPressed: () {},
-                ),
-              )
             ],
           )
         ],
