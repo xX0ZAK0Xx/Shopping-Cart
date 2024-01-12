@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shopping_cart/providers/cart_list_provider.dart';
 
-class MyCard extends StatefulWidget {
+class MyCard extends StatelessWidget {
   final item;
   const MyCard({super.key, this.item});
 
-  @override
-  State<MyCard> createState() => _MyCardState();
-}
-
-class _MyCardState extends State<MyCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,7 +36,7 @@ class _MyCardState extends State<MyCard> {
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 child: Image(
                   fit: BoxFit.cover,
-                  image: NetworkImage(widget.item["imageUrl"]),
+                  image: NetworkImage(item["imageUrl"]),
                 )),
           ),
           const SizedBox(
@@ -52,13 +49,13 @@ class _MyCardState extends State<MyCard> {
             children: [
               //---------- Name ----------
               Text(
-                widget.item["name"],
+                item["name"],
                 style:
                     const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
               ),
               //---------- Price ----------
               Text(
-                "\$${widget.item["price"].toString()}",
+                "\$${item["price"].toString()}",
                 style:
                     const TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
               ),
@@ -68,17 +65,28 @@ class _MyCardState extends State<MyCard> {
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                height: 40,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.black),
-                    shape: BoxShape.circle),
-                child: IconButton(
-                  icon: const Icon(
-                    Icons.shopping_cart,
+              Consumer<CartListProvider>(
+                builder: (BuildContext context, CartListProvider value,
+                        Widget? child) =>
+                    Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                      color: value.cartItems.contains(item) ? Colors.black : Colors.white,
+                      border: Border.all(color: Colors.black),
+                      shape: BoxShape.circle),
+                  child: IconButton(
+                    icon:  Icon(
+                      Icons.shopping_cart,
+                      color: value.cartItems.contains(item) ? Colors.white : Colors.black,
+                    ),
+                    onPressed: () {
+                      if(value.cartItems.contains(item)){
+                        value.removeFromCart(item);
+                      }else{
+                        value.addToCart(item);
+                      }
+                    },
                   ),
-                  onPressed: () {},
                 ),
               ),
               const SizedBox(
